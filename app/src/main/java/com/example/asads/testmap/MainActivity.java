@@ -1,7 +1,6 @@
 package com.example.asads.testmap;
 
 import android.Manifest;
-import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
@@ -14,8 +13,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.content.Context;
@@ -38,16 +35,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private static final String TAG = "MainActivity";
     private LocationManager locationManager;
     private LinkedList<SignalData> signalData = new LinkedList<>();
-//    private Button insertDataButton, loadDatabaseButton;
     private TextView locationTextView, signalTextView;
     private EditText databaseEditText;
     private double latitude, longitude, signalDBM;
-    private boolean isLocationSet = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
 
         DatabaseHandler.initialize(this);
@@ -56,65 +50,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         signalTextView = findViewById(R.id.signalTextView);
         databaseEditText = findViewById(R.id.databaseEditText);
         databaseEditText.setFocusable(false);
-//        insertDataButton = findViewById(R.id.insertDataButton);
-//        loadDatabaseButton = findViewById(R.id.loadDatabaseButton);
 
         if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) && checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
         }
-
-//
-//        insertDataButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                setupSignalStrength();
-////                setupSignalStrength();
-////                Log.d(TAG, "onClick: after setupSignalStrength()");
-////                getLocation();
-////                Log.d(TAG, "onClick: after getLocation()");
-//            }
-//        });
-//
-//        loadDatabaseButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                signalData = DatabaseHandler.selectSignalData(MainActivity.this, "id = id");
-//                StringBuilder databaseText = new StringBuilder();
-//                for(SignalData signal : signalData) {
-//                    databaseText.append(signal);
-//                }
-//                databaseEditText.setText(databaseText.toString());
-//            }
-//        });
-
-//        pickPointButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (isLocationSet) {
-//                    Intent pickPointIntent = new Intent(MainActivity.this, MapsActivity.class);
-//                    pickPointIntent.putExtra("latitude", latitude);
-//                    pickPointIntent.putExtra("longitude", longitude);
-//                    startActivity(pickPointIntent);
-//                } else {
-//                    Toast.makeText(MainActivity.this, "First Get Current Location", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-//
-//        getLocationButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getLocation();
-//            }
-//        });
-//
-//        checkSignalButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent signalIntent = new Intent(MainActivity.this, Signal.class);
-//                startActivity(signalIntent);
-//            }
-//        });
     }
 
     public void setupSignalStrength() {
@@ -150,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         try {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, MainActivity.this);
-            isLocationSet = true;
         } catch (SecurityException e) {
             Toast.makeText(MainActivity.this, "error on getLocationButton Clicked", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
@@ -176,9 +114,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             case R.id.loadDatabase:
                 signalData = DatabaseHandler.selectSignalData(MainActivity.this, "id = id");
                 databaseText = new StringBuilder();
+                databaseText.append("JSON DATA\n{");
                 for(SignalData signal : signalData) {
-                    databaseText.append(signal).append("\n");
+                    databaseText.append(signal).append(',').append("\n");
                 }
+                databaseText.append("}");
                 databaseEditText.setText(databaseText.toString());
                 break;
             case R.id.deleteDatabase:

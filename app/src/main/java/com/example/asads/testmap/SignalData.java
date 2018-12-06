@@ -64,10 +64,6 @@ public class SignalData {
 
     @Override
     public String toString() {
-        return "SignalData{" +
-                "signalDBM=" + signalDBM +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                '}';
+        return '{' + "signalDBM:" + signalDBM + ", latitude:" + latitude + ", longitude:" + longitude + '}';
     }
 }
