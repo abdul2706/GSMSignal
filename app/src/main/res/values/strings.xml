@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">TestMap</string>
+    <string name="show_current_location">Show Current Location</string>
+    <string name="get_current_location">Get Current Location</string>
+    <string name="check_signals">Check Signals</string>
+    <string name="current_location">Current Location</string>
+    <string name="insert_data">Insert Location and Signal</string>
+    <string name="load_database">Load Database</string>
+</resources>
